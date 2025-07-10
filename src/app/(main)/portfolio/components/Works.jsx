@@ -13,7 +13,7 @@ const Works = () => {
   return (
     <>
       <motion.div variants={textVariant()}>
-        <p className={styles.sectionSubText}>My Work</p>
+        <p className={styles.sectionSubText}>Công việc</p>
         <h2 className={styles.sectionHeadText}>
           Tôi đã làm gì trong những năm qua
         </h2>
@@ -23,7 +23,7 @@ const Works = () => {
             variants={fadeIn("", "", 0.1, 1)}
             className='mt-3 text-muted-foreground text-[17px] max-w-3xl leading-[30px]'
           >
-            Dưới đây là một số dự án mà tôi đã làm trong những năm qua. Tôi đã làm việc với nhiều công nghệ khác nhau và đã học được rất nhiều điều từ mỗi dự án. Tôi hy vọng bạn sẽ tìm thấy những dự án này thú vị và hữu ích.
+            Dưới đây là một số dự án mà tôi đã làm trong những năm qua. Tôi đã làm việc với nhiều công nghệ khác nhau và đã học được rất nhiều điều từ mỗi dự án. Tôi hy vọng bạn thấy những dự án này thú vị và hữu ích.
           </motion.p>
         </div>
 

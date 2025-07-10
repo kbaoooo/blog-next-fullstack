@@ -44,7 +44,7 @@ const Contact = () => {
     }, 'yRujF4o67sj-ysotP')
       .then(() => {
         setLoading(false);
-        alert("Cảm ơn bạn đã liên hệ với mình!");
+        alert("Cảm ơn bạn đã liên hệ với tôi!");
         setForm({
           name: "",
           email: "",
@@ -65,7 +65,7 @@ const Contact = () => {
         className="flex-[0.75] bg-black-500 p-8 rounded-2xl"
       >
         <p className={styles.sectionSubText}>Liên hệ</p>
-        <h3 className={styles.sectionHeadText}>Liên hệ với mình.</h3>
+        <h3 className={styles.sectionHeadText}>Liên hệ với tôi.</h3>
 
         <form 
           ref={formRef}
@@ -101,7 +101,7 @@ const Contact = () => {
               name="message"
               value={form.message}
               onChange={handleChange}
-              placeholder="Gửi gì đó cho mình :)"
+              placeholder="Gửi gì đó cho tôi :)"
               className="bg-tertiary resize-none py-4 px-6 placeholder:text-muted-foreground text-white rounded-lg outline-none border-none font-medium"
             />
           </label>

@@ -1,8 +1,6 @@
 "use client";
 
-import { motion } from 'framer-motion';
 import { styles } from "../styles";
-import { useEffect, useState } from 'react';
 import ComputersCanvas from './canvas/Computers';
 
 const Hero = () => {
@@ -16,10 +14,10 @@ const Hero = () => {
 
         <div >
           <h1 className={`${styles.heroHeadText} text-white`}>
-            Mình là <span className='text-[#915eff]'>KhanhBao</span>
+            <span className='text-[#915eff]'>KhanhBao</span>
           </h1>
           <p className={`${styles.heroSubText} mt-2 text-white-100`}>
-            Mình là web applications <br className='sm:block hidden' />
+            Web applications <br className='sm:block hidden' />
             developer.
           </p>
         </div>

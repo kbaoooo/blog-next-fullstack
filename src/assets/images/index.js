@@ -30,6 +30,15 @@ import carrent from "./carrent.png";
 import jobit from "./jobit.png";
 import tripguide from "./tripguide.png";
 
+import socialMediaPlatform from "./social-media-platform.png";
+import tomatoRestaurant from "./tomato-restaurant.png";
+import tinamusic from "./tinamusic.png";
+import blog from "./blog.png";
+import lmsSample from "./lms-sample.png";
+import frontend from "./frontend.png";
+import webDevelopment from './web-development.png';
+import fullstackDevelopment from './fullstack-development.png';
+
 export {
   logo,
   backend,
@@ -59,4 +68,12 @@ export {
   carrent,
   jobit,
   tripguide,
+  socialMediaPlatform,
+  tomatoRestaurant,
+  tinamusic,
+  blog,
+  lmsSample,
+  frontend,
+  webDevelopment,
+  fullstackDevelopment,
 };

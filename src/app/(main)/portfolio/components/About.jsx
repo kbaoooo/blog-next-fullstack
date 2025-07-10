@@ -14,14 +14,14 @@ const About = () => {
     <>
       <motion.div variants={textVariant()}>
         <p className={`${styles.sectionSubText}`}>GIỚI THIỆU</p>
-        <h2 className={`${styles.sectionHeadText}`}>Giới thiệu về mình.</h2>
+        <h2 className={`${styles.sectionHeadText}`}>Giới thiệu về tôi.</h2>
       </motion.div>
 
       <motion.p
         variants={fadeIn('', '', 0.1, 1)}
         className='mt-4 text-muted-foreground text-[17px] max-w-3xl leading-[30px]'
       >
-        Mình là một lập trình viên web với hơn 2 năm kinh nghiệm trong việc phát triển ứng dụng web. Mình đã làm việc với nhiều công nghệ khác nhau, bao gồm React, Node.js, và MongoDB. Mình đam mê tạo ra những ứng dụng web đẹp mắt và hiệu quả, đồng thời luôn tìm kiếm cơ hội để học hỏi và cải thiện kỹ năng của mình.
+        Tôi là một lập trình viên web với hơn 2 năm kinh nghiệm trong việc phát triển ứng dụng web. Tôi đã làm việc với nhiều công nghệ khác nhau, bao gồm React, Node.js, và MongoDB. Tôi đam mê tạo ra những ứng dụng web đẹp mắt và hiệu quả, đồng thời luôn tìm kiếm cơ hội để học hỏi và cải thiện kỹ năng của tôi.
       </motion.p>
 
       <div className='mt-20 flex flex-wrap gap-10'>
