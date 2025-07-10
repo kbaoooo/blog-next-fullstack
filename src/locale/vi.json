@@ -1,0 +1,14 @@
+{
+    "auth": {
+        "signin": "Đăng nhập",
+        "logout": "Đăng xuất",
+        "signup": "Đăng ký",
+        "forgotPassword": "Quên mật khẩu",
+        "resetPassword": "Đặt lại mật khẩu",
+        "changePassword": "Thay đổi mật khẩu",
+        "email": "Email",
+        "password": "Mật khẩu",
+        "confirmPassword": "Xác nhận mật khẩu",
+        "rememberMe": "Ghi nhớ tôi"
+    }
+}
