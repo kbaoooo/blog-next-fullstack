@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { Calendar, Clock, User, Eye, Heart, Share2, BookOpen, ArrowLeft, ArrowRight, Home, Moon, Sun, BookOpenText } from 'lucide-react';
-import { BlogsContainer } from '../../page';
 import { BlogCardProps } from '@/utils/types';
 import Image from 'next/image';
 import AuthorImage from '@/assets/images/author.jpg'
+import { BlogsContainer } from '../../components/blog-container';
 
 export default function Page({ params }: { params: { slug: string } }) {
     const { slug } = params || { slug: 'momentjs-tutorial' };
