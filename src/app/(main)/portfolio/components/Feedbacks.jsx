@@ -12,7 +12,7 @@ const Feedbacks = () => {
     <div className='mt-10 bg-black-500 rounded-2xl'>
       <div className={`${styles.padding} bg-tertiary rounded-2xl min-h-[300px]`}>
         <motion.div variants={textVariant()}>
-          <p className={styles.sectionSubText}>Feedback về mình</p>
+          <p className={styles.sectionSubText}>Feedback về tôi</p>
           <h2 className={styles.sectionHeadText}>Feedback.</h2>
         </motion.div>
       </div>
@@ -39,7 +39,7 @@ const FeedbackCard = (props) => {
       className='bg-black-600 p-10 rounded-3xl md:w-[320px] w-full'
     >
       <p className='text-white font-black text-[48px]'>
-        "
+        &quot;
       </p>
       <div className='mt-1'>
         <p className='text-white tracking-wider text-[18px]'>{testimonial}</p>
