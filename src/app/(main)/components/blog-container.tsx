@@ -1,11 +1,15 @@
 import { BlogCardProps } from "@/utils/types";
 import BlogCard from "./blog-card";
 
-export function BlogsContainer({ 
-  data, 
-  layout = "grid", 
-  className  = ""
-}: { data: BlogCardProps[], layout?: "grid" | "sidebar", className?: string }) {
+export function BlogsContainer({
+  data,
+  layout = "grid",
+  className = "",
+}: {
+  data: BlogCardProps[];
+  layout?: "grid" | "sidebar";
+  className?: string;
+}) {
   if (layout === "sidebar") {
     return (
       <div className={`flex flex-col gap-6 ${className}`}>

@@ -1,40 +1,44 @@
-import HeroSection from "@/app/(main)/components/hero-section";
 import Seperator from "@/app/(main)/components/seperator";
 import { BlogCardProps } from "@/utils/types";
 import { BlogsContainer } from "./components/blog-container";
+import ScrollEffectWrapper from "./ScrollEffectWrapper";
 
 const SampleBlogs: BlogCardProps[] = [
   {
     title: "Khám Phá Next.js 14",
-    description: "Tìm hiểu những tính năng mới trong Next.js 14 và cách chúng cải thiện hiệu suất ứng dụng.",
+    description:
+      "Tìm hiểu những tính năng mới trong Next.js 14 và cách chúng cải thiện hiệu suất ứng dụng.",
     imageUrl: "https://picsum.photos/640/360?random=1",
     views: 1200,
     date: "2023-10-01",
-    slug: "kham-pha-nextjs-14"
+    slug: "kham-pha-nextjs-14",
   },
   {
     title: "NestJS Architecture",
-    description: "Hướng dẫn xây dựng kiến trúc ứng dụng với NestJS cho các dự án lớn.",
+    description:
+      "Hướng dẫn xây dựng kiến trúc ứng dụng với NestJS cho các dự án lớn.",
     imageUrl: "https://picsum.photos/640/360?random=2",
     views: 800,
     date: "2023-09-15",
-    slug: "nestjs-architecture"
+    slug: "nestjs-architecture",
   },
   {
     title: "Clean Code Principles",
-    description: "Các nguyên tắc viết mã sạch giúp duy trì chất lượng mã nguồn trong dự án.",
+    description:
+      "Các nguyên tắc viết mã sạch giúp duy trì chất lượng mã nguồn trong dự án.",
     imageUrl: "https://picsum.photos/640/360?random=3",
     views: 1500,
     date: "2023-08-20",
-    slug: "clean-code-principles"
+    slug: "clean-code-principles",
   },
   {
     title: "TypeScript Tips and Tricks",
-    description: "Những mẹo và thủ thuật hữu ích khi làm việc với TypeScript trong các dự án web.",
+    description:
+      "Những mẹo và thủ thuật hữu ích khi làm việc với TypeScript trong các dự án web.",
     imageUrl: "https://picsum.photos/640/360?random=4",
     views: 950,
     date: "2023-07-10",
-    slug: "typescript-tips-and-tricks"
+    slug: "typescript-tips-and-tricks",
   },
   {
     title: "Modern Web Development",
@@ -42,7 +46,7 @@ const SampleBlogs: BlogCardProps[] = [
     imageUrl: "https://picsum.photos/640/360?random=5",
     views: 1100,
     date: "2023-05-25",
-    slug: "modern-web-development"
+    slug: "modern-web-development",
   },
   {
     title: "Next.js Performance Optimization",
@@ -50,7 +54,7 @@ const SampleBlogs: BlogCardProps[] = [
     imageUrl: "https://picsum.photos/640/360?random=6",
     views: 1300,
     date: "2023-04-15",
-    slug: "nextjs-performance-optimization"
+    slug: "nextjs-performance-optimization",
   },
   {
     title: "Building Scalable APIs with NestJS",
@@ -58,15 +62,16 @@ const SampleBlogs: BlogCardProps[] = [
     imageUrl: "https://picsum.photos/640/360?random=7",
     views: 700,
     date: "2023-03-30",
-    slug: "building-scalable-apis-nestjs"
-  }
+    slug: "building-scalable-apis-nestjs",
+  },
 ];
+
+
 
 export default function Home() {
   return (
     <div className="overflow-x-hidden">
-      <HeroSection />
-      <TopPostsSection />
+      <ScrollEffectWrapper data={SampleBlogs} />
       <NewsestPostsSection />
       <MustReadSection />
     </div>
@@ -88,20 +93,6 @@ function MustReadSection() {
   );
 }
 
-function TopPostsSection() {
-  // fetch data from an API example here is static data: SampleBlogs
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex items-center gap-3 my-8">
-        <h2 className="text-xl leading-none font-semibold text-neutral-600 capitalize dark:text-muted-foreground whitespace-nowrap">
-          Bài viết nổi bật
-        </h2>
-        <Seperator />
-      </div>
-      <BlogsContainer data={SampleBlogs} />
-    </div>
-  );
-}
 
 function NewsestPostsSection() {
   // fetch data from an API example here is static data: SampleBlogs
