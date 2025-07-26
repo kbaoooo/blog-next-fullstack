@@ -1,5 +1,125 @@
-import * as React from "react"
+import { ArrowDown, BookOpen, Code, Coffee, Sparkles } from "lucide-react";
+import SearchBar from "./search-bar";
 
+interface HeroSectionProps {
+  onScrollToHeading: () => void;
+}
+
+export default function HeroSection({ onScrollToHeading }: HeroSectionProps) {
+  return (
+    <div className="relative min-h-[80vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-background via-background to-primary/5">
+      {/* Background Elements */}
+      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+
+      {/* Floating Elements */}
+      <div className="absolute top-20 left-10 opacity-20">
+        <Code className="w-8 h-8 text-primary animate-pulse" />
+      </div>
+      <div className="absolute top-32 right-16 opacity-30">
+        <BookOpen className="w-6 h-6 text-primary animate-bounce delay-75" />
+      </div>
+      <div className="absolute bottom-32 left-20 opacity-25">
+        <Coffee className="w-7 h-7 text-primary animate-pulse delay-150" />
+      </div>
+      <div className="absolute bottom-40 right-12 opacity-20">
+        <Sparkles className="w-5 h-5 text-primary animate-bounce delay-300" />
+      </div>
+
+      {/* Main Content */}
+      <div className="relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Search Bar */}
+        <div className="max-w-2xl mx-auto my-12">
+          <SearchBar placeholder="Tìm kiếm bài viết về Next.js, NestJS, TypeScript..." />
+        </div>
+
+        {/* Main Heading */}
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+          <span className="text-foreground">Fullstack</span>{" "}
+          <span className="bg-gradient-to-r from-purple-600 via-indigo-700 to-purple-800 bg-clip-text text-transparent">
+            Developer
+          </span>
+        </h1>
+
+        {/* Subtitle */}
+        <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed">
+          Chia sẻ kinh nghiệm về{" "}
+          <span className="text-primary font-semibold">Next.js</span>,{" "}
+          <span className="text-primary font-semibold">NestJS</span>,{" "}
+          <span className="text-primary font-semibold">TypeScript</span> và
+          những xu hướng phát triển web hiện đại
+        </p>
+
+        {/* Tech Stack */}
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
+          {techStack.map((tech, index) => (
+            <div
+              key={index}
+              className="px-4 py-2 bg-card/50 backdrop-blur-sm rounded-lg border border-border text-sm font-medium text-muted-foreground hover:text-primary hover:border-primary/30 transition-all duration-200 cursor-default"
+            >
+              {tech}
+            </div>
+          ))}
+        </div>
+
+        {/* Call to Action */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <button
+            onClick={onScrollToHeading}
+            className="group px-8 py-4 bg-gradient-to-r from-primary to-primary/80 text-white rounded-xl hover:from-primary/90 hover:to-primary/70 transition-all duration-200 shadow-lg shadow-primary/25 font-medium"
+          >
+            Khám phá bài viết
+            <ArrowDown className="inline-block w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
+          </button>
+          <button className="px-8 py-4 bg-card/50 backdrop-blur-sm border border-border text-foreground rounded-xl hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all duration-200 font-medium">
+            Về tôi
+          </button>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-8 mt-16 pt-8 border-t border-border/50">
+          <div className="text-center">
+            <div className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+              50+
+            </div>
+            <div className="text-sm text-muted-foreground">Bài viết</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+              10k+
+            </div>
+            <div className="text-sm text-muted-foreground">Lượt đọc</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+              2+
+            </div>
+            <div className="text-sm text-muted-foreground">Năm kinh nghiệm</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <ArrowDown className="w-5 h-5 text-muted-foreground" />
+      </div>
+    </div>
+  );
+}
+
+const techStack = [
+  "TypeScript",
+  "Next.js",
+  "NestJS",
+  "React",
+  "Node.js",
+  "Prisma",
+  "PostgreSQL",
+  "TailwindCSS",
+];
+
+/* 
+// Old colorful hero section - commented out
 export default function HeroSection() {
   return (
     <div className="max-w-full items-center -rotate-2 select-none justify-center max-h-[350px] md:h-[400px] text-center overflow-hidden hidden md:flex">
@@ -79,3 +199,4 @@ const textItems = [
     style: "italic font-bold"
   },
 ]
+*/
