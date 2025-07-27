@@ -1,18 +1,18 @@
 "use client";
 
-import { 
-  Settings, 
-  User, 
-  Lock, 
-  Globe, 
-  Mail, 
-  Bell, 
-  Palette, 
+import {
+  Bell,
   Database,
-  Shield,
-  Save,
   Eye,
-  EyeOff
+  EyeOff,
+  Globe,
+  Lock,
+  Mail,
+  Palette,
+  Save,
+  Settings,
+  Shield,
+  User,
 } from "lucide-react";
 import { useState } from "react";
 
@@ -27,34 +27,42 @@ export default function SettingsPage() {
     siteDescription: "Blog về lập trình và công nghệ",
     siteUrl: "https://khanhbao.dev",
     adminEmail: "nbaokhanh1243@gmail.com",
-    
+
     // Profile Settings
     fullName: "Nguyễn Bảo Khánh",
     username: "khanh_bao",
     email: "nbaokhanh1243@gmail.com",
     bio: "Full-stack Developer, Next.js enthusiast",
-    
+
     // Security Settings
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
     twoFactorEnabled: false,
-    
-    // Notifications
-    emailNotifications: true,
-    commentNotifications: true,
-    newsletterUpdates: false,
-    securityAlerts: true,
-    
+
+    // Notifications - Admin specific
+    emailNotifications: true, // Nhận email khi có comment mới
+    newCommentNotifications: true, // Nhận email khi có bình luận mới
+    newFollowerNotifications: true, // Nhận email khi có follower mới
+    newUserNotifications: true, // Nhận email khi có user đăng ký
+    systemAlerts: true, // Cảnh báo bảo mật và hệ thống
+
+    // Blog Management
+    commentModeration: "auto", // "auto" | "manual" | "disabled"
+    autoPublishPosts: true,
+    newsletterEnabled: true,
+    maintenanceMode: false,
+
     // Theme
     theme: "dark",
     primaryColor: "#8B5CF6",
-    
+
     // SEO
     metaTitle: "Khanh Bao Blog - Lập trình & Công nghệ",
-    metaDescription: "Blog chia sẻ kiến thức về lập trình, Next.js, React và các công nghệ web hiện đại",
+    metaDescription:
+      "Blog chia sẻ kiến thức về lập trình, Next.js, React và các công nghệ web hiện đại",
     googleAnalytics: "",
-    facebookPixel: ""
+    facebookPixel: "",
   });
 
   const tabs = [
@@ -64,7 +72,7 @@ export default function SettingsPage() {
     { id: "notifications", label: "Thông báo", icon: Bell },
     { id: "appearance", label: "Giao diện", icon: Palette },
     { id: "seo", label: "SEO", icon: Globe },
-    { id: "integrations", label: "Tích hợp", icon: Database }
+    { id: "integrations", label: "Tích hợp", icon: Database },
   ];
 
   const handleSave = () => {
@@ -73,16 +81,18 @@ export default function SettingsPage() {
   };
 
   const handleInputChange = (field: string, value: string | boolean) => {
-    setSettings(prev => ({
+    setSettings((prev) => ({
       ...prev,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const renderGeneralTab = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Thông tin chung</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">
+          Thông tin chung
+        </h3>
         <div className="grid gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -101,7 +111,9 @@ export default function SettingsPage() {
             </label>
             <textarea
               value={settings.siteDescription}
-              onChange={(e) => handleInputChange("siteDescription", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("siteDescription", e.target.value)
+              }
               rows={3}
               className="w-full px-4 py-3 bg-black-400 border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
@@ -136,7 +148,9 @@ export default function SettingsPage() {
   const renderProfileTab = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Thông tin cá nhân</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">
+          Thông tin cá nhân
+        </h3>
         <div className="grid gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -200,7 +214,9 @@ export default function SettingsPage() {
               <input
                 type={showPassword ? "text" : "password"}
                 value={settings.currentPassword}
-                onChange={(e) => handleInputChange("currentPassword", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("currentPassword", e.target.value)
+                }
                 className="w-full px-4 py-3 pr-12 bg-black-400 border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
               />
               <button
@@ -208,7 +224,11 @@ export default function SettingsPage() {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>
@@ -220,7 +240,9 @@ export default function SettingsPage() {
               <input
                 type={showNewPassword ? "text" : "password"}
                 value={settings.newPassword}
-                onChange={(e) => handleInputChange("newPassword", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("newPassword", e.target.value)
+                }
                 className="w-full px-4 py-3 pr-12 bg-black-400 border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
               />
               <button
@@ -228,7 +250,11 @@ export default function SettingsPage() {
                 onClick={() => setShowNewPassword(!showNewPassword)}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
               >
-                {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showNewPassword ? (
+                  <EyeOff className="h-4 w-4" />
+                ) : (
+                  <Eye className="h-4 w-4" />
+                )}
               </button>
             </div>
           </div>
@@ -239,29 +265,37 @@ export default function SettingsPage() {
             <input
               type="password"
               value={settings.confirmPassword}
-              onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("confirmPassword", e.target.value)
+              }
               className="w-full px-4 py-3 bg-black-400 border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
           </div>
         </div>
       </div>
-      
+
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Bảo mật nâng cao</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">
+          Bảo mật nâng cao
+        </h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between p-4 bg-black-400/30 rounded-lg">
             <div className="flex items-center gap-3">
               <Shield className="h-5 w-5 text-primary" />
               <div>
                 <h4 className="font-medium text-white">Xác thực hai yếu tố</h4>
-                <p className="text-sm text-gray-400">Tăng cường bảo mật tài khoản</p>
+                <p className="text-sm text-gray-400">
+                  Tăng cường bảo mật tài khoản
+                </p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
                 checked={settings.twoFactorEnabled}
-                onChange={(e) => handleInputChange("twoFactorEnabled", e.target.checked)}
+                onChange={(e) =>
+                  handleInputChange("twoFactorEnabled", e.target.checked)
+                }
                 className="sr-only peer"
               />
               <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
@@ -275,63 +309,148 @@ export default function SettingsPage() {
   const renderNotificationsTab = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Cài đặt thông báo</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">
+          Cài đặt thông báo
+        </h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between p-4 bg-black-400/30 rounded-lg">
             <div className="flex items-center gap-3">
               <Mail className="h-5 w-5 text-primary" />
               <div>
                 <h4 className="font-medium text-white">Thông báo email</h4>
-                <p className="text-sm text-gray-400">Nhận thông báo qua email</p>
+                <p className="text-sm text-gray-400">
+                  Nhận thông báo qua email
+                </p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
                 checked={settings.emailNotifications}
-                onChange={(e) => handleInputChange("emailNotifications", e.target.checked)}
+                onChange={(e) =>
+                  handleInputChange("emailNotifications", e.target.checked)
+                }
                 className="sr-only peer"
               />
               <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
             </label>
           </div>
-          
+
           <div className="flex items-center justify-between p-4 bg-black-400/30 rounded-lg">
             <div className="flex items-center gap-3">
               <Bell className="h-5 w-5 text-primary" />
               <div>
-                <h4 className="font-medium text-white">Thông báo bình luận</h4>
-                <p className="text-sm text-gray-400">Khi có bình luận mới</p>
+                <h4 className="font-medium text-white">
+                  Email thông báo comment
+                </h4>
+                <p className="text-sm text-gray-400">
+                  Nhận email khi có comment mới trên blog
+                </p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
-                checked={settings.commentNotifications}
-                onChange={(e) => handleInputChange("commentNotifications", e.target.checked)}
+                checked={settings.emailNotifications && settings.newCommentNotifications}
+                onChange={(e) =>
+                  handleInputChange("newCommentNotifications", e.target.checked)
+                }
                 className="sr-only peer"
               />
               <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
             </label>
           </div>
-          
+
           <div className="flex items-center justify-between p-4 bg-black-400/30 rounded-lg">
             <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-primary" />
+              <User className="h-5 w-5 text-primary" />
               <div>
-                <h4 className="font-medium text-white">Cảnh báo bảo mật</h4>
-                <p className="text-sm text-gray-400">Thông báo hoạt động đáng ngờ</p>
+                <h4 className="font-medium text-white">Follower mới</h4>
+                <p className="text-sm text-gray-400">
+                  Nhận email khi có người theo dõi blog
+                </p>
               </div>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
-                checked={settings.securityAlerts}
-                onChange={(e) => handleInputChange("securityAlerts", e.target.checked)}
+                checked={settings.emailNotifications && settings.newFollowerNotifications}
+                onChange={(e) =>
+                  handleInputChange("newFollowerNotifications", e.target.checked)
+                }
                 className="sr-only peer"
               />
               <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
             </label>
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-black-400/30 rounded-lg">
+            <div className="flex items-center gap-3">
+              <User className="h-5 w-5 text-primary" />
+              <div>
+                <h4 className="font-medium text-white">Người dùng mới</h4>
+                <p className="text-sm text-gray-400">
+                  Nhận email khi có người đăng ký tài khoản mới
+                </p>
+              </div>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.emailNotifications && settings.newUserNotifications}
+                onChange={(e) =>
+                  handleInputChange("newUserNotifications", e.target.checked)
+                }
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-black-400/30 rounded-lg">
+            <div className="flex items-center gap-3">
+              <Shield className="h-5 w-5 text-primary" />
+              <div>
+                <h4 className="font-medium text-white">Cảnh báo hệ thống</h4>
+                <p className="text-sm text-gray-400">
+                  Thông báo bảo mật và hoạt động quan trọng
+                </p>
+              </div>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={settings.systemAlerts}
+                onChange={(e) =>
+                  handleInputChange("systemAlerts", e.target.checked)
+                }
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+
+          <div className="flex items-center justify-between p-4 bg-black-400/30 rounded-lg">
+            <div className="flex items-center gap-3">
+              <Settings className="h-5 w-5 text-primary" />
+              <div>
+                <h4 className="font-medium text-white">Moderation Comments</h4>
+                <p className="text-sm text-gray-400">
+                  Tự động duyệt comment hay cần duyệt thủ công
+                </p>
+              </div>
+            </div>
+            <select
+              value={settings.commentModeration}
+              onChange={(e) =>
+                handleInputChange("commentModeration", e.target.value)
+              }
+              className="px-3 py-2 bg-black-300 text-white rounded-lg border border-gray-600 focus:border-primary focus:outline-none"
+            >
+              <option value="auto">Tự động duyệt</option>
+              <option value="manual">Duyệt thủ công</option>
+              <option value="disabled">Tắt comment</option>
+            </select>
           </div>
         </div>
       </div>
@@ -360,7 +479,9 @@ export default function SettingsPage() {
             </label>
             <textarea
               value={settings.metaDescription}
-              onChange={(e) => handleInputChange("metaDescription", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("metaDescription", e.target.value)
+              }
               rows={3}
               className="w-full px-4 py-3 bg-black-400 border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
@@ -372,7 +493,9 @@ export default function SettingsPage() {
             <input
               type="text"
               value={settings.googleAnalytics}
-              onChange={(e) => handleInputChange("googleAnalytics", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("googleAnalytics", e.target.value)
+              }
               placeholder="G-XXXXXXXXXX"
               className="w-full px-4 py-3 bg-black-400 border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
@@ -384,7 +507,9 @@ export default function SettingsPage() {
             <input
               type="text"
               value={settings.facebookPixel}
-              onChange={(e) => handleInputChange("facebookPixel", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("facebookPixel", e.target.value)
+              }
               placeholder="123456789012345"
               className="w-full px-4 py-3 bg-black-400 border border-primary/20 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
             />
@@ -419,7 +544,7 @@ export default function SettingsPage() {
           <h1 className="text-2xl font-bold text-white">Cài đặt</h1>
           <p className="text-gray-400">Quản lý cài đặt hệ thống và tài khoản</p>
         </div>
-        <button 
+        <button
           onClick={handleSave}
           className="flex items-center px-4 py-2 bg-gradient-to-r from-primary to-primary/80 text-white rounded-lg hover:from-primary/90 hover:to-primary/70 transition-all duration-200 shadow-lg shadow-primary/25"
         >

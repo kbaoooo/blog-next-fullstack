@@ -12,7 +12,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["randomuser.me", "picsum.photos"],
+    domains: ["randomuser.me", "picsum.photos", "images.unsplash.com"],
   },
   eslint: {
     ignoreDuringBuilds: true,
