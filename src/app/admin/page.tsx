@@ -10,7 +10,12 @@ import {
   PlusCircle,
   TrendingDown
 } from "lucide-react";
+import { Metadata } from "next";
 import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "Admin Dashboard",
+};
 
 interface Stats {
   title: string;

@@ -4,7 +4,7 @@ import { BlogsContainer } from "./components/blog-container";
 import Seperator from "./components/seperator";
 
 type TopPostsSectionProps = {
-  data: BlogCardProps[];
+  data: BlogCardProps[] | [];
 };
 
 export type TopPostsSectionHandle = {

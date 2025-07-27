@@ -9,13 +9,13 @@ type TopPostsSectionHandle = {
   scrollToHeading: () => void;
 };
 
-interface ScrollEffectWrapperProps {
+interface ScrollEffectWrapperForHeroSectionAndTopPostsSectionProps {
   data?: BlogCardProps[];
 }
 
-export default function ScrollEffectWrapper({
+export default function ScrollEffectWrapperForHeroSectionAndTopPostsSection({
   data = [],
-}: ScrollEffectWrapperProps) {
+}: ScrollEffectWrapperForHeroSectionAndTopPostsSectionProps) {
   const topPostsSectionRef = useRef<TopPostsSectionHandle>(null);
   const handleScroll = () => {
     topPostsSectionRef.current?.scrollToHeading();

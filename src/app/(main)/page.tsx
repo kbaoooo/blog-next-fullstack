@@ -1,7 +1,12 @@
-import Seperator from "@/app/(main)/components/seperator";
 import { BlogCardProps } from "@/utils/types";
-import { BlogsContainer } from "./components/blog-container";
-import ScrollEffectWrapper from "./ScrollEffectWrapper";
+import { Metadata } from "next";
+import MustReadSection from "./MustReadSection";
+import NewsestPostsSection from "./NewsestPostsSection";
+import ScrollEffectWrapperForHeroSectionAndTopPostsSection from "./ScrollEffectWrapperForHeroSectionAndTopPostsSection";
+
+export const metadata: Metadata = {
+  title: "Trang chủ",
+};
 
 const SampleBlogs: BlogCardProps[] = [
   {
@@ -66,45 +71,12 @@ const SampleBlogs: BlogCardProps[] = [
   },
 ];
 
-
-
 export default function Home() {
   return (
     <div className="overflow-x-hidden">
-      <ScrollEffectWrapper data={SampleBlogs} />
-      <NewsestPostsSection />
-      <MustReadSection />
-    </div>
-  );
-}
-
-function MustReadSection() {
-  // fetch data from an API example here is static data: SampleBlogs
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex items-center gap-3 my-8">
-        <h2 className="text-xl leading-none font-semibold text-neutral-600 capitalize dark:text-muted-foreground whitespace-nowrap">
-          Phải đọc thêm
-        </h2>
-        <Seperator />
-      </div>
-      <BlogsContainer data={SampleBlogs} />
-    </div>
-  );
-}
-
-
-function NewsestPostsSection() {
-  // fetch data from an API example here is static data: SampleBlogs
-  return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex items-center gap-3 my-8">
-        <h2 className="text-xl leading-none font-semibold text-neutral-600 capitalize dark:text-muted-foreground whitespace-nowrap">
-          Bài viết mới nhất
-        </h2>
-        <Seperator />
-      </div>
-      <BlogsContainer data={SampleBlogs} />
+      <ScrollEffectWrapperForHeroSectionAndTopPostsSection data={SampleBlogs} />
+      <NewsestPostsSection data={SampleBlogs} />
+      <MustReadSection data={SampleBlogs} />
     </div>
   );
 }

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/custom/theme-provider";
-import { Divide } from "lucide-react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,7 +16,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Blog",
+    template: "KhanhBao Blog | %s",
     default: "Blog",
   }
 };

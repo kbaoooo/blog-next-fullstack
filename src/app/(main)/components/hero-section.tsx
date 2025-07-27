@@ -1,9 +1,21 @@
 import { ArrowDown, BookOpen, Code, Coffee, Sparkles } from "lucide-react";
+import Link from "next/link";
 import SearchBar from "./search-bar";
 
 interface HeroSectionProps {
   onScrollToHeading: () => void;
 }
+
+const techStack = [
+  "TypeScript",
+  "Next.js",
+  "NestJS",
+  "React",
+  "Node.js",
+  "Prisma",
+  "PostgreSQL",
+  "TailwindCSS",
+];
 
 export default function HeroSection({ onScrollToHeading }: HeroSectionProps) {
   return (
@@ -13,24 +25,24 @@ export default function HeroSection({ onScrollToHeading }: HeroSectionProps) {
       <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
 
       {/* Floating Elements */}
-      <div className="absolute top-20 left-10 opacity-20">
-        <Code className="w-8 h-8 text-primary animate-pulse" />
+      <div className="absolute top-20 left-24 opacity-20">
+        <Code className="w-12 h-12 text-primary animate-pulse" />
       </div>
       <div className="absolute top-32 right-16 opacity-30">
-        <BookOpen className="w-6 h-6 text-primary animate-bounce delay-75" />
+        <BookOpen className="w-10 h-10 text-primary animate-bounce delay-75" />
       </div>
-      <div className="absolute bottom-32 left-20 opacity-25">
-        <Coffee className="w-7 h-7 text-primary animate-pulse delay-150" />
+      <div className="absolute bottom-36 left-20 opacity-25">
+        <Coffee className="w-9 h-9 text-primary animate-pulse delay-150" />
       </div>
       <div className="absolute bottom-40 right-12 opacity-20">
-        <Sparkles className="w-5 h-5 text-primary animate-bounce delay-300" />
+        <Sparkles className="w-11 h-11 text-primary animate-bounce delay-300" />
       </div>
 
       {/* Main Content */}
       <div className="relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Search Bar */}
         <div className="max-w-2xl mx-auto my-12">
-          <SearchBar placeholder="Tìm kiếm bài viết về Next.js, NestJS, TypeScript..." />
+          <SearchBar placeholder="Tìm kiếm bài viết..." />
         </div>
 
         {/* Main Heading */}
@@ -71,9 +83,12 @@ export default function HeroSection({ onScrollToHeading }: HeroSectionProps) {
             Khám phá bài viết
             <ArrowDown className="inline-block w-4 h-4 ml-2 group-hover:translate-y-1 transition-transform" />
           </button>
-          <button className="px-8 py-4 bg-card/50 backdrop-blur-sm border border-border text-foreground rounded-xl hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all duration-200 font-medium">
+          <Link
+            href="/portfolio"
+            className="px-8 py-4 bg-card/50 backdrop-blur-sm border border-border text-foreground rounded-xl hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all duration-200 font-medium"
+          >
             Về tôi
-          </button>
+          </Link>
         </div>
 
         {/* Stats */}
@@ -92,31 +107,15 @@ export default function HeroSection({ onScrollToHeading }: HeroSectionProps) {
           </div>
           <div className="text-center">
             <div className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-              2+
+              1+
             </div>
             <div className="text-sm text-muted-foreground">Năm kinh nghiệm</div>
           </div>
         </div>
       </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <ArrowDown className="w-5 h-5 text-muted-foreground" />
-      </div>
     </div>
   );
 }
-
-const techStack = [
-  "TypeScript",
-  "Next.js",
-  "NestJS",
-  "React",
-  "Node.js",
-  "Prisma",
-  "PostgreSQL",
-  "TailwindCSS",
-];
 
 /* 
 // Old colorful hero section - commented out
