@@ -1,123 +1,152 @@
-'use client';
+"use client";
 
-import { signInSchema, SignInType } from "@/lib/validations";
-import {zodResolver} from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useState, useTransition } from "react";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-  } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import PasswordInput from "@/components/custom/password-input";
-import LoadingButton from "@/components/custom/loading-button";
+import { loginAction } from "@/app/(auth)/actions";
+import FloatingInput from "@/components/custom/floating-input";
+import GlassButton from "@/components/custom/glass-button";
 import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
+import { useAuth } from "@/lib/auth/auth-context";
+import { loginSchema, type LoginInput } from "@/lib/auth/auth-validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle, Lock, Mail } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
 
 export default function SignInForm() {
-    const [error, setError] = useState<string>();
-    const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string>();
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
 
-    const form = useForm<SignInType>({
-        resolver: zodResolver(signInSchema),
-        defaultValues: {
-            email: "",
-            password: "",
-            rememberMe: false, 
-        },
+  // Sử dụng AuthContext để refresh user state
+  const { refreshUser } = useAuth();
+
+  const form = useForm<LoginInput>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
+
+  async function onSubmit(values: LoginInput) {
+    setError(undefined);
+
+    startTransition(async () => {
+      try {
+        const formData = new FormData();
+        formData.append("email", values.email);
+        formData.append("password", values.password);
+        if (values.rememberMe) {
+          formData.append("rememberMe", "on");
+        }
+
+        const result = await loginAction(formData);
+
+        if (result.success) {
+          // Refresh user state trước khi redirect
+          await refreshUser();
+
+          // Redirect to intended page or home
+          router.push(redirectTo);
+        } else {
+          setError(result.message);
+
+          // Set field-specific errors if available
+          if (result.errors) {
+            Object.entries(result.errors).forEach(([field, messages]) => {
+              if (messages && messages.length > 0) {
+                form.setError(field as keyof LoginInput, {
+                  message: messages[0],
+                });
+              }
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        setError("Có lỗi xảy ra, vui lòng thử lại");
+      }
     });
+  }
 
-    const signIn = (value: SignInType) =>{
-        return new Promise<{ error?: string }>((resolve) => {
-            setTimeout(() => {
-                console.log("Signing in with:", value);
-            }, 1000);
-            // Resolve with no error for now
-            resolve({ error: undefined });
-        });
-    }
+  const {
+    formState: { errors },
+    register,
+    handleSubmit,
+    watch,
+  } = form;
+  const rememberMe = watch("rememberMe");
 
-    async function onSubmit(values: SignInType) {
-        setError(undefined);
-        startTransition(async () => {
-          const { error } = await signIn(values);
-          if (error) setError(error);
-        });
-    }
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      {/* Global Error Message */}
+      {error && (
+        <div className="flex items-center space-x-2 p-4 bg-red-500/10 border border-red-400/30 rounded-xl backdrop-blur-sm animate-in slide-in-from-top-2 duration-300">
+          <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+          <p className="text-red-300 text-sm">{error}</p>
+        </div>
+      )}
 
-    return (
-        <Form {...form}>
-            <form className="space-y-5" onSubmit={form.handleSubmit(onSubmit)}>
-                {error && <p className="text-center text-destructive">{error}</p>}
-                <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel className="block text-gray-300 mb-1 text-sm">Email</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="email"
-                                    className="w-full px-4 py-2 bg-white/10 text-white placeholder-gray-400 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                    placeholder="you@example.com"
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <label className="block text-gray-300 mb-1 text-sm">Password</label>
-                            <FormControl>
-                                <PasswordInput
-                                    className="w-full px-4 py-2 bg-white/10 text-white placeholder-gray-400 border border-white/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                    placeholder={"********"}
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <div className="flex justify-between items-center text-sm text-gray-300">
-                    <FormField
-                        control={form.control}
-                        name="rememberMe"
-                        render={({ field }) => (
-                            <FormItem className="flex items-center space-x-2">
-                                <FormControl>
-                                    <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                </FormControl>
-                                <FormLabel className="text-sm text-gray-300 cursor-pointer !mt-0">
-                                    Remember me
-                                </FormLabel>
-                            </FormItem>
-                        )}
-                    />
-                    <Link href="#" className="hover:underline text-purple-400">
-                        Forgot password?
-                    </Link>
-                </div>
-                <LoadingButton
-                    isLoading={isPending}
-                    type="submit"
-                    className="w-full py-2 text-white font-semibold rounded-lg transition duration-300 shadow-lg"
-                >
-                    Sign In
-                </LoadingButton>
-            </form>
-        </Form>
-    );
+      {/* Email Field */}
+      <FloatingInput
+        {...register("email")}
+        label="Địa chỉ email"
+        type="email"
+        error={errors.email?.message}
+        leftIcon={<Mail className="w-5 h-5" />}
+      />
+
+      {/* Password Field */}
+      <FloatingInput
+        {...register("password")}
+        label="Mật khẩu"
+        isPassword
+        error={errors.password?.message}
+        leftIcon={<Lock className="w-5 h-5" />}
+      />
+
+      {/* Remember Me & Forgot Password */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="rememberMe"
+            {...register("rememberMe")}
+            checked={rememberMe}
+            onCheckedChange={(checked) =>
+              form.setValue("rememberMe", checked === true)
+            }
+            className="border-white/30 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+          />
+          <label
+            htmlFor="rememberMe"
+            className="text-sm text-gray-300 cursor-pointer select-none"
+          >
+            Ghi nhớ đăng nhập
+          </label>
+        </div>
+
+        <button
+          type="button"
+          className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
+        >
+          Quên mật khẩu?
+        </button>
+      </div>
+
+      {/* Submit Button */}
+      <GlassButton
+        type="submit"
+        isLoading={isPending}
+        variant="primary"
+        size="lg"
+        className="w-full group"
+        disabled={isPending}
+      >
+        {isPending ? "Đang đăng nhập..." : "Đăng nhập"}
+      </GlassButton>
+    </form>
+  );
 }

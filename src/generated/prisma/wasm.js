@@ -125,9 +125,67 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   username: 'username',
+  fullName: 'fullName',
   bio: 'bio',
   role: 'role',
+  status: 'status',
   avatarUrl: 'avatarUrl',
+  instagramUrl: 'instagramUrl',
+  facebookUrl: 'facebookUrl',
+  linkedinUrl: 'linkedinUrl',
+  githubUrl: 'githubUrl',
+  emailVerified: 'emailVerified',
+  twoFactorEnabled: 'twoFactorEnabled',
+  emailNewPosts: 'emailNewPosts',
+  notiNewPosts: 'notiNewPosts',
+  notiCommentReplies: 'notiCommentReplies',
+  notiLikeComment: 'notiLikeComment',
+  notiSystem: 'notiSystem',
+  notiComment: 'notiComment',
+  notiSharePost: 'notiSharePost',
+  notiLikePost: 'notiLikePost',
+  notiFollow: 'notiFollow',
+  browserNotifications: 'browserNotifications',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  lastLoginAt: 'lastLoginAt'
+};
+
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sessionId: 'sessionId',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  userAgent: 'userAgent',
+  ipAddress: 'ipAddress',
+  device: 'device',
+  browser: 'browser',
+  lastActiveAt: 'lastActiveAt',
+  isActive: 'isActive'
+};
+
+exports.Prisma.CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  color: 'color',
+  parentId: 'parentId',
+  metaTitle: 'metaTitle',
+  metaDescription: 'metaDescription',
+  postCount: 'postCount',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TagScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  color: 'color',
   createdAt: 'createdAt'
 };
 
@@ -136,31 +194,25 @@ exports.Prisma.PostScalarFieldEnum = {
   title: 'title',
   slug: 'slug',
   content: 'content',
+  excerpt: 'excerpt',
   coverImage: 'coverImage',
-  published: 'published',
-  publishedAt: 'publishedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
+  status: 'status',
+  featured: 'featured',
   draftContent: 'draftContent',
-  viewCount: 'viewCount',
+  publishedAt: 'publishedAt',
+  scheduledAt: 'scheduledAt',
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
   ogImage: 'ogImage',
+  canonicalUrl: 'canonicalUrl',
+  viewCount: 'viewCount',
+  likeCount: 'likeCount',
+  commentCount: 'commentCount',
+  readingTime: 'readingTime',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   authorId: 'authorId',
-  seriesId: 'seriesId'
-};
-
-exports.Prisma.SeriesScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  slug: 'slug',
-  coverImage: 'coverImage',
-  createdAt: 'createdAt'
-};
-
-exports.Prisma.TagScalarFieldEnum = {
-  id: 'id',
-  name: 'name'
+  categoryId: 'categoryId'
 };
 
 exports.Prisma.PostTagScalarFieldEnum = {
@@ -172,9 +224,97 @@ exports.Prisma.PostTagScalarFieldEnum = {
 exports.Prisma.CommentScalarFieldEnum = {
   id: 'id',
   content: 'content',
-  createdAt: 'createdAt',
+  status: 'status',
+  parentId: 'parentId',
   postId: 'postId',
-  authorId: 'authorId'
+  authorId: 'authorId',
+  likeCount: 'likeCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CommentReactionScalarFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.LikeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  postId: 'postId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FollowScalarFieldEnum = {
+  id: 'id',
+  followerId: 'followerId',
+  followingId: 'followingId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PostViewScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  userId: 'userId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  referer: 'referer',
+  device: 'device',
+  country: 'country',
+  viewedAt: 'viewedAt'
+};
+
+exports.Prisma.MediaScalarFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  url: 'url',
+  type: 'type',
+  size: 'size',
+  mimeType: 'mimeType',
+  width: 'width',
+  height: 'height',
+  alt: 'alt',
+  caption: 'caption',
+  description: 'description',
+  folder: 'folder',
+  used: 'used',
+  uploadedById: 'uploadedById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PostMediaScalarFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  mediaId: 'mediaId',
+  usage: 'usage',
+  order: 'order'
+};
+
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  read: 'read',
+  recipientId: 'recipientId',
+  actorId: 'actorId',
+  postId: 'postId',
+  commentId: 'commentId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SiteSettingsScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  type: 'type',
+  label: 'label',
+  description: 'description',
+  category: 'category',
+  updatedById: 'updatedById',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -197,8 +337,42 @@ exports.Prisma.UserOrderByRelevanceFieldEnum = {
   email: 'email',
   password: 'password',
   username: 'username',
+  fullName: 'fullName',
   bio: 'bio',
-  avatarUrl: 'avatarUrl'
+  avatarUrl: 'avatarUrl',
+  instagramUrl: 'instagramUrl',
+  facebookUrl: 'facebookUrl',
+  linkedinUrl: 'linkedinUrl',
+  githubUrl: 'githubUrl'
+};
+
+exports.Prisma.SessionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  sessionId: 'sessionId',
+  userAgent: 'userAgent',
+  ipAddress: 'ipAddress',
+  device: 'device',
+  browser: 'browser'
+};
+
+exports.Prisma.CategoryOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  color: 'color',
+  parentId: 'parentId',
+  metaTitle: 'metaTitle',
+  metaDescription: 'metaDescription'
+};
+
+exports.Prisma.TagOrderByRelevanceFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug',
+  description: 'description',
+  color: 'color'
 };
 
 exports.Prisma.PostOrderByRelevanceFieldEnum = {
@@ -206,25 +380,15 @@ exports.Prisma.PostOrderByRelevanceFieldEnum = {
   title: 'title',
   slug: 'slug',
   content: 'content',
+  excerpt: 'excerpt',
   coverImage: 'coverImage',
   draftContent: 'draftContent',
   metaTitle: 'metaTitle',
   metaDescription: 'metaDescription',
   ogImage: 'ogImage',
+  canonicalUrl: 'canonicalUrl',
   authorId: 'authorId',
-  seriesId: 'seriesId'
-};
-
-exports.Prisma.SeriesOrderByRelevanceFieldEnum = {
-  id: 'id',
-  title: 'title',
-  slug: 'slug',
-  coverImage: 'coverImage'
-};
-
-exports.Prisma.TagOrderByRelevanceFieldEnum = {
-  id: 'id',
-  name: 'name'
+  categoryId: 'categoryId'
 };
 
 exports.Prisma.PostTagOrderByRelevanceFieldEnum = {
@@ -235,21 +399,144 @@ exports.Prisma.PostTagOrderByRelevanceFieldEnum = {
 exports.Prisma.CommentOrderByRelevanceFieldEnum = {
   id: 'id',
   content: 'content',
+  parentId: 'parentId',
   postId: 'postId',
   authorId: 'authorId'
 };
+
+exports.Prisma.CommentReactionOrderByRelevanceFieldEnum = {
+  id: 'id',
+  commentId: 'commentId',
+  userId: 'userId'
+};
+
+exports.Prisma.LikeOrderByRelevanceFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  postId: 'postId'
+};
+
+exports.Prisma.FollowOrderByRelevanceFieldEnum = {
+  id: 'id',
+  followerId: 'followerId',
+  followingId: 'followingId'
+};
+
+exports.Prisma.PostViewOrderByRelevanceFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  userId: 'userId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  referer: 'referer',
+  device: 'device',
+  country: 'country'
+};
+
+exports.Prisma.MediaOrderByRelevanceFieldEnum = {
+  id: 'id',
+  filename: 'filename',
+  url: 'url',
+  mimeType: 'mimeType',
+  alt: 'alt',
+  caption: 'caption',
+  description: 'description',
+  folder: 'folder',
+  uploadedById: 'uploadedById'
+};
+
+exports.Prisma.PostMediaOrderByRelevanceFieldEnum = {
+  id: 'id',
+  postId: 'postId',
+  mediaId: 'mediaId'
+};
+
+exports.Prisma.NotificationOrderByRelevanceFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  recipientId: 'recipientId',
+  actorId: 'actorId',
+  postId: 'postId',
+  commentId: 'commentId'
+};
+
+exports.Prisma.SiteSettingsOrderByRelevanceFieldEnum = {
+  id: 'id',
+  key: 'key',
+  value: 'value',
+  type: 'type',
+  label: 'label',
+  description: 'description',
+  category: 'category',
+  updatedById: 'updatedById'
+};
 exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN',
-  USER: 'USER'
+  GUEST: 'GUEST',
+  FOLLOWER: 'FOLLOWER'
+};
+
+exports.UserStatus = exports.$Enums.UserStatus = {
+  ACTIVE: 'ACTIVE',
+  INACTIVE: 'INACTIVE',
+  SUSPENDED: 'SUSPENDED'
+};
+
+exports.PostStatus = exports.$Enums.PostStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  SCHEDULED: 'SCHEDULED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.CommentStatus = exports.$Enums.CommentStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  SPAM: 'SPAM'
+};
+
+exports.MediaType = exports.$Enums.MediaType = {
+  IMAGE: 'IMAGE',
+  VIDEO: 'VIDEO',
+  DOCUMENT: 'DOCUMENT',
+  AUDIO: 'AUDIO'
+};
+
+exports.MediaUsageType = exports.$Enums.MediaUsageType = {
+  COVER: 'COVER',
+  CONTENT: 'CONTENT',
+  GALLERY: 'GALLERY'
+};
+
+exports.NotificationType = exports.$Enums.NotificationType = {
+  COMMENT: 'COMMENT',
+  COMMENT_REPLY: 'COMMENT_REPLY',
+  LIKE_POST: 'LIKE_POST',
+  LIKE_COMMENT: 'LIKE_COMMENT',
+  SHARE_POST: 'SHARE_POST',
+  FOLLOW: 'FOLLOW',
+  POST_PUBLISHED: 'POST_PUBLISHED',
+  SYSTEM: 'SYSTEM'
 };
 
 exports.Prisma.ModelName = {
   User: 'User',
-  Post: 'Post',
-  Series: 'Series',
+  Session: 'Session',
+  Category: 'Category',
   Tag: 'Tag',
+  Post: 'Post',
   PostTag: 'PostTag',
-  Comment: 'Comment'
+  Comment: 'Comment',
+  CommentReaction: 'CommentReaction',
+  Like: 'Like',
+  Follow: 'Follow',
+  PostView: 'PostView',
+  Media: 'Media',
+  PostMedia: 'PostMedia',
+  Notification: 'Notification',
+  SiteSettings: 'SiteSettings'
 };
 
 /**

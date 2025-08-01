@@ -36,14 +36,6 @@ export default function Avatar({
   const sizeClass = sizeClasses[size];
   const pixelSize = sizePixels[size];
 
-  console.log("Avatar render:", {
-    name,
-    initials,
-    backgroundColor,
-    avatarUrl,
-    hasAvatar: !!(avatarUrl && avatarUrl.trim() !== ""),
-  });
-
   if (avatarUrl && avatarUrl.trim() !== "") {
     return (
       <Image

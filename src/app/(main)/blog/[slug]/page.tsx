@@ -2,7 +2,7 @@
 
 import AuthorImage from "@/assets/images/author.jpg";
 import FollowButton from "@/components/custom/follow-button";
-import NewsletterSignup from "@/components/custom/newsletter-signup";
+// import NewsletterSignup from "@/components/custom/newsletter-signup";
 import { BlogCardProps } from "@/utils/types";
 import {
   BookOpen,
@@ -442,6 +442,11 @@ MomentJS provides a robust solution for date manipulation in JavaScript. While n
                       <Share2 className="w-4 h-4" />
                       <span className="font-medium">Chia sẻ</span>
                     </button>
+                    <FollowButton
+                      isFollowing={false}
+                      followerCount={1247}
+                      variant="default"
+                    />
                   </div>
                 </div>
 
@@ -838,47 +843,15 @@ MomentJS provides a robust solution for date manipulation in JavaScript. While n
           {/* Sidebar */}
           <aside className="lg:col-span-1">
             <div className="space-y-6 sticky top-24">
-              {/* Author Follow Section */}
-              <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-6 border border-border shadow-lg">
-                <div className="text-center space-y-4">
-                  <div className="relative mx-auto w-20 h-20">
-                    <Image
-                      width={80}
-                      height={80}
-                      src={blogPost.author.avatar}
-                      alt={blogPost.author.name}
-                      className="w-20 h-20 rounded-full ring-4 ring-primary/20 shadow-lg object-cover mx-auto"
-                    />
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-4 border-background"></div>
-                  </div>
-
-                  <div>
-                    <h3 className="text-lg font-bold text-foreground">
-                      {blogPost.author.name}
-                    </h3>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      {blogPost.author.bio}
-                    </p>
-                  </div>
-
-                  <FollowButton
-                    isFollowing={false}
-                    followerCount={1247}
-                    variant="default"
-                    showCount={true}
-                  />
-                </div>
-              </div>
-
               {/* Newsletter Signup */}
-              <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-6 border border-border shadow-lg">
+              {/* <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-6 border border-border shadow-lg">
                 <NewsletterSignup
                   variant="compact"
                   placeholder="Email của bạn..."
                   showIcon={false}
                   className="space-y-4"
                 />
-              </div>
+              </div> */}
 
               {/* Table of Contents */}
               <div className="bg-card/50 backdrop-blur-sm rounded-2xl p-6 border border-border shadow-lg">

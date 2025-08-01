@@ -63,6 +63,12 @@ enum NotificationType {
   SYSTEM
 }
 
+enum MediaUsageType {
+  COVER // Hình ảnh bìa bài viết
+  CONTENT // Hình ảnh trong nội dung bài viết
+  GALLERY // Hình ảnh trong thư viện
+}
+
 // ========================================
 // USER MANAGEMENT
 // ========================================
@@ -88,14 +94,18 @@ model User {
   emailVerified    Boolean @default(false)
   twoFactorEnabled Boolean @default(false)
 
-  // Notification Settings cho USERS (GUEST/FOLLOWER)
+  // Notification Settings cho USERS (GUEST/FOLLOWER/ADMIN)
   emailNewPosts        Boolean @default(false) // Nhận email khi có bài viết mới
-  emailCommentReplies  Boolean @default(false) // Nhận email khi có ai reply comment của mình
-  emailNewsletter      Boolean @default(false) // Newsletter hàng tuần
+  notiNewPosts         Boolean @default(true) // Nhận email khi có ai reply comment của mình
+  notiCommentReplies   Boolean @default(true) // Newsletter hàng tuần
+  notiLikeComment      Boolean @default(true) // Nhận thông báo khi có ai thích comment của mình
+  notiSystem           Boolean @default(true) // Nhận thông báo hệ thống (bảo trì, cập nhật, v.v.)
+  // Only for admin
+  notiComment          Boolean @default(true) // Nhận thông báo khi có ai bình luận bài viết của mình 
+  notiSharePost        Boolean @default(true) // Nhận thông báo khi có ai chia sẻ bài viết của mình
+  notiLikePost         Boolean @default(true) // Nhận thông báo khi có ai thích bài viết của mình
+  notiFollow           Boolean @default(true) // Nhận thông báo khi có người theo d
   browserNotifications Boolean @default(false) // Push notifications trên browser
-
-  // Privacy Settings cho USERS
-  profilePublic Boolean @default(true) // Cho phép admin xem thông tin cơ bản
 
   // Timestamps
   createdAt   DateTime  @default(now())
@@ -193,21 +203,6 @@ model Tag {
   @@index([slug])
 }
 
-model Series {
-  id          String  @id @default(cuid())
-  title       String
-  slug        String  @unique
-  description String?
-  coverImage  String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  posts Post[]
-
-  @@index([slug])
-}
-
 model Post {
   id         String     @id @default(cuid())
   title      String
@@ -248,8 +243,6 @@ model Post {
   author     User      @relation(fields: [authorId], references: [id])
   categoryId String?
   category   Category? @relation(fields: [categoryId], references: [id])
-  seriesId   String?
-  series     Series?   @relation(fields: [seriesId], references: [id])
 
   tags     PostTag[]
   comments Comment[]
@@ -312,9 +305,7 @@ model Comment {
 }
 
 model CommentReaction {
-  id   String @id @default(cuid())
-  type String // "like", "dislike", "love", etc.
-
+  id        String  @id @default(cuid())
   commentId String
   comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
   userId    String
@@ -322,7 +313,7 @@ model CommentReaction {
 
   createdAt DateTime @default(now())
 
-  @@unique([commentId, userId, type])
+  @@unique([commentId, userId])
   @@index([commentId])
   @@index([userId])
 }
@@ -432,7 +423,7 @@ model PostMedia {
   media   Media  @relation(fields: [mediaId], references: [id])
 
   // Usage type in post
-  usage String // "cover", "content", "gallery"
+  usage MediaUsageType // "cover", "content", "gallery"
   order Int    @default(0)
 
   @@unique([postId, mediaId])

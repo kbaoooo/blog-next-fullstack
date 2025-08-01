@@ -1,23 +1,33 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Heart, Mail, UserCheck, UserPlus } from "lucide-react";
+import { Heart, UserCheck, UserPlus } from "lucide-react";
 import { useEffect, useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 interface FollowButtonProps {
   isFollowing?: boolean;
   followerCount?: number;
   className?: string;
-  variant?: "default" | "compact" | "icon-only";
-  showCount?: boolean;
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "outline" | "ghost";
+  disabled?: boolean;
+  onFollowChange?: (isFollowing: boolean) => void;
 }
 
 export default function FollowButton({
   isFollowing = false,
   followerCount = 0,
   className,
+  size = "md",
   variant = "default",
-  showCount = true,
+  disabled = false,
+  onFollowChange,
 }: FollowButtonProps) {
   const [following, setFollowing] = useState(isFollowing);
   const [count, setCount] = useState(followerCount);
@@ -29,144 +39,149 @@ export default function FollowButton({
     setIsMounted(true);
   }, []);
 
+  // Update local state when props change
+  useEffect(() => {
+    setFollowing(isFollowing);
+    setCount(followerCount);
+  }, [isFollowing, followerCount]);
+
   const handleFollow = async () => {
-    if (isLoading) return;
+    if (isLoading || disabled) return;
 
     setIsLoading(true);
 
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    if (following) {
-      setFollowing(false);
-      setCount((prev) => Math.max(0, prev - 1));
-    } else {
-      setFollowing(true);
+    const newFollowingState = !following;
+    setFollowing(newFollowingState);
+
+    if (newFollowingState) {
       setCount((prev) => prev + 1);
+    } else {
+      setCount((prev) => Math.max(0, prev - 1));
     }
+
+    // Call callback if provided
+    onFollowChange?.(newFollowingState);
 
     setIsLoading(false);
   };
 
   // Prevent hydration mismatch
   if (!isMounted) {
-    return null;
-  }
-
-  if (variant === "icon-only") {
     return (
-      <button
-        onClick={handleFollow}
-        disabled={isLoading}
+      <div
         className={cn(
-          "p-2 rounded-full transition-all duration-200 group",
-          following
-            ? "bg-red-500/10 text-red-500 hover:bg-red-500/20"
-            : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-red-500/10 hover:text-red-500",
-          isLoading && "opacity-50 cursor-not-allowed",
+          "inline-flex items-center justify-center rounded-lg font-medium transition-colors",
+          "opacity-0", // Hidden during hydration
+          getSizeClasses(size),
           className
         )}
-        title={following ? "Hủy theo dõi" : "Theo dõi blog"}
       >
-        <Heart
-          className={cn(
-            "w-5 h-5 transition-all duration-200",
-            following ? "fill-current" : "group-hover:fill-current"
-          )}
-        />
-      </button>
-    );
-  }
-
-  if (variant === "compact") {
-    return (
-      <div className="flex items-center space-x-2">
-        <button
-          onClick={handleFollow}
-          disabled={isLoading}
-          className={cn(
-            "flex items-center space-x-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
-            following
-              ? "bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-200 dark:border-red-800"
-              : "bg-primary text-primary-foreground hover:bg-primary/90 border border-primary",
-            isLoading && "opacity-50 cursor-not-allowed",
-            className
-          )}
-        >
-          {isLoading ? (
-            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-          ) : following ? (
-            <UserCheck className="w-4 h-4" />
-          ) : (
-            <UserPlus className="w-4 h-4" />
-          )}
-          <span>{following ? "Đang theo dõi" : "Theo dõi"}</span>
-        </button>
-
-        {showCount && (
-          <span className="text-sm text-muted-foreground">
-            {count.toLocaleString()} người theo dõi
-          </span>
-        )}
+        <UserPlus className={getIconSize(size)} />
+        <span className="ml-2">Theo dõi</span>
       </div>
     );
   }
 
-  return (
-    <div className={cn("space-y-3", className)}>
-      {/* Main Follow Button */}
-      <button
-        onClick={handleFollow}
-        disabled={isLoading}
-        className={cn(
-          "w-full flex items-center justify-center space-x-2 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-200 shadow-lg",
-          following
-            ? "bg-red-500/10 text-red-500 hover:bg-red-500/20 border-2 border-red-200 dark:border-red-800"
-            : "bg-gradient-to-r from-primary to-purple-600 text-white hover:from-primary/90 hover:to-purple-600/90 border-2 border-transparent",
-          isLoading && "opacity-50 cursor-not-allowed"
-        )}
-      >
-        {isLoading ? (
-          <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
-        ) : following ? (
-          <>
-            <UserCheck className="w-5 h-5" />
-            <span>Đang theo dõi</span>
-          </>
-        ) : (
-          <>
-            <UserPlus className="w-5 h-5" />
-            <span>Theo dõi Blog</span>
-          </>
-        )}
-      </button>
+  const buttonContent = (
+    <button
+      onClick={handleFollow}
+      disabled={isLoading || disabled}
+      className={cn(
+        "inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2",
+        getSizeClasses(size),
+        getVariantClasses(variant, following),
+        (isLoading || disabled) && "opacity-50 cursor-not-allowed",
+        className
+      )}
+    >
+      {isLoading ? (
+        <div
+          className={cn(
+            "border-2 border-current border-t-transparent rounded-full animate-spin",
+            getIconSize(size)
+          )}
+        />
+      ) : following ? (
+        <UserCheck className={getIconSize(size)} />
+      ) : (
+        <UserPlus className={getIconSize(size)} />
+      )}
+      <span className="ml-2">{following ? "Đang theo dõi" : "Theo dõi"}</span>
+    </button>
+  );
 
-      {/* Follower Count */}
-      {showCount && (
-        <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>{buttonContent}</TooltipTrigger>
+        <TooltipContent>
           <div className="flex items-center space-x-1">
-            <Heart className="w-4 h-4" />
+            <Heart className="w-4 h-4 text-red-500" />
             <span>{count.toLocaleString()} người theo dõi</span>
           </div>
-        </div>
-      )}
-
-      {/* Newsletter Subscription Hint */}
-      {following && (
-        <div className="bg-primary/5 border border-primary/20 rounded-lg p-3">
-          <div className="flex items-start space-x-2">
-            <Mail className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-            <div className="text-sm">
-              <p className="text-foreground font-medium">
-                Đã theo dõi thành công! 🎉
-              </p>
-              <p className="text-muted-foreground mt-1">
-                Bạn sẽ nhận được thông báo về các bài viết mới.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
+}
+
+// Helper functions for styling
+function getSizeClasses(size: "sm" | "md" | "lg"): string {
+  switch (size) {
+    case "sm":
+      return "px-3 py-1.5 text-sm";
+    case "md":
+      return "px-4 py-2 text-sm";
+    case "lg":
+      return "px-6 py-3 text-base";
+    default:
+      return "px-4 py-2 text-sm";
+  }
+}
+
+function getIconSize(size: "sm" | "md" | "lg"): string {
+  switch (size) {
+    case "sm":
+      return "w-4 h-4";
+    case "md":
+      return "w-4 h-4";
+    case "lg":
+      return "w-5 h-5";
+    default:
+      return "w-4 h-4";
+  }
+}
+
+function getVariantClasses(
+  variant: "default" | "outline" | "ghost",
+  isFollowing: boolean
+): string {
+  if (isFollowing) {
+    // Following state styling
+    switch (variant) {
+      case "default":
+        return "bg-green-500/10 text-green-600 border border-green-200 hover:bg-green-500/20 focus:ring-green-500 dark:border-green-800 dark:text-green-400";
+      case "outline":
+        return "border-2 border-green-500 text-green-600 hover:bg-green-500/10 focus:ring-green-500 dark:text-green-400";
+      case "ghost":
+        return "text-green-600 hover:bg-green-500/10 focus:ring-green-500 dark:text-green-400";
+      default:
+        return "bg-green-500/10 text-green-600 border border-green-200 hover:bg-green-500/20 focus:ring-green-500 dark:border-green-800 dark:text-green-400";
+    }
+  } else {
+    // Not following state styling
+    switch (variant) {
+      case "default":
+        return "bg-primary text-primary-foreground border border-primary hover:bg-primary/90 focus:ring-primary";
+      case "outline":
+        return "border-2 border-primary text-primary hover:bg-primary/10 focus:ring-primary";
+      case "ghost":
+        return "text-primary hover:bg-primary/10 focus:ring-primary";
+      default:
+        return "bg-primary text-primary-foreground border border-primary hover:bg-primary/90 focus:ring-primary";
+    }
+  }
 }

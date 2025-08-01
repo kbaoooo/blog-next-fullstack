@@ -1,15 +1,18 @@
 "use client";
 
+import { Role } from "@/generated/prisma";
+import { useAuth } from "@/lib/auth/auth-context";
 import { cn } from "@/lib/utils";
-import { Menu, Settings, User, X } from "lucide-react";
+import { Menu, Settings, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Avatar from "./avatar";
+import LogoutButton from "./logout-button";
 import NotificationBell from "./notification-bell";
 import PrimaryLogo from "./primary-logo";
 import { ModeToggle } from "./toggle-theme";
 import UserSettingsModal from "./user-settings-modal";
-import Avatar from "./avatar";
 
 interface LinkType {
   href: string;
@@ -20,17 +23,11 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showUserSettings, setShowUserSettings] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(true); // Mock authentication state
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname();
 
-  // Mock user data
-  const mockUser = {
-    name: "Khánh Bảo",
-    email: "kbaooo@example.com",
-    avatar: "",
-    role: "ADMIN" as const,
-  };
+  // Sử dụng user thật từ AuthContext
+  const { user, isLoading, isAuthenticated } = useAuth();
 
   // Fix hydration mismatch
   useEffect(() => {
@@ -69,8 +66,10 @@ export default function Navbar() {
     { href: "/", label: "Trang chủ" },
     { href: "/portfolio", label: "Portfolio" },
     { href: "/lien-he", label: "Liên hệ" },
-    { href: "/admin", label: "Admin" }, // Only show if user is admin through auth middleware
   ];
+
+  if (user?.role === Role.ADMIN)
+    navLinks.push({ href: "/admin", label: "Admin" });
 
   const authLinks: LinkType[] = [
     { href: "/dang-nhap", label: "Đăng nhập" },
@@ -111,7 +110,7 @@ export default function Navbar() {
           {pathname !== "/portfolio" && <ModeToggle />}
 
           {/* Notification Bell và User Controls (chỉ hiện khi đã đăng nhập) */}
-          {isMounted && isLoggedIn ? (
+          {isMounted && isAuthenticated && user ? (
             <div className="flex items-center gap-3">
               <NotificationBell />
 
@@ -123,19 +122,29 @@ export default function Navbar() {
                 >
                   <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                     <Avatar
-                      name={mockUser.name}
-                      avatarUrl={mockUser.avatar}
+                      name={user.fullName || user.username}
+                      avatarUrl={user.avatarUrl || ""}
                       size="sm"
                     />
                   </div>
                   <span className="text-sm font-medium text-foreground">
-                    {mockUser.name}
+                    {user.fullName || user.username}
                   </span>
                   <Settings className="w-4 h-4 text-muted-foreground" />
                 </button>
               </div>
+
+              {/* Logout Button */}
+              <LogoutButton
+                variant="ghost"
+                size="sm"
+                showIcon={true}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+              >
+                Đăng xuất
+              </LogoutButton>
             </div>
-          ) : isMounted && !isLoggedIn ? (
+          ) : isMounted && !isAuthenticated && !isLoading ? (
             /* Auth Links khi chưa đăng nhập */
             <div className="flex xl:gap-3">
               {authLinks.map((link) => (
@@ -158,7 +167,7 @@ export default function Navbar() {
 
         {/* Mobile/Tablet Right Section */}
         <div className="flex lg:hidden items-center gap-3">
-          {isMounted && isLoggedIn && <NotificationBell />}
+          {isMounted && isAuthenticated && <NotificationBell />}
           <ModeToggle />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -175,11 +184,28 @@ export default function Navbar() {
       </div>
 
       {/* User Settings Modal */}
-      {isMounted && (
+      {isMounted && user && (
         <UserSettingsModal
           isOpen={showUserSettings}
           onClose={() => setShowUserSettings(false)}
-          user={mockUser}
+          user={{
+            name: user?.fullName || user?.username,
+            email: user?.email,
+            avatar: user?.avatarUrl || "",
+            role: user?.role,
+            settings: {
+              emailNewPosts: user?.emailNewPosts, // Nhận email khi có bài viết mới
+              notiNewPosts: user?.notiNewPosts, // Nhận thông báo khi có bài viết mới
+              notiCommentReplies: user?.notiCommentReplies, // Nhận thông báo khi có ai reply comment
+              notiLikeComment: user?.notiCommentReplies, // Nhận thông báo khi có ai thích comment của mình
+              notiComment: user?.notiComment, // Nhận thông báo bình luận mới (only for admin)
+              notiSharePost: user?.notiSharePost, // Nhận thông báo khi có ai chia sẻ bài viết của mình(only for admin)
+              notiLikePost: user?.notiLikePost, // Nhận thông báo khi có ai thích bài viết của mình(only for admin)
+              notiFollow: user?.notiFollow, // Nhận thông báo khi có người theo dõi mình(only for admin)
+              browserNotifications: user?.browserNotifications, // Push notifications trên browser
+              twoFactorEnabled: user?.twoFactorEnabled, // Xác thực 2 yếu tố
+            },
+          }}
         />
       )}
 
@@ -210,21 +236,25 @@ export default function Navbar() {
               {/* Auth Links */}
               <div className="flex flex-col space-y-4 pt-4 border-t border-border">
                 <h3 className="text-[12px] font-semibold text-muted-foreground uppercase tracking-wide">
-                  {isLoggedIn ? "Tài khoản" : "Đăng nhập"}
+                  {isAuthenticated ? "Tài khoản" : "Đăng nhập"}
                 </h3>
 
-                {isLoggedIn ? (
+                {isAuthenticated && user ? (
                   <div className="space-y-3">
                     <div className="flex items-center space-x-3 p-3 bg-accent/50 rounded-lg">
                       <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                        <User className="w-5 h-5 text-primary" />
+                        <Avatar
+                          name={user.fullName || user.username}
+                          avatarUrl={user.avatarUrl || ""}
+                          size="sm"
+                        />
                       </div>
                       <div>
                         <p className="font-medium text-foreground">
-                          {mockUser.name}
+                          {user.fullName || user.username}
                         </p>
                         <p className="text-sm text-muted-foreground">
-                          {mockUser.email}
+                          {user.email}
                         </p>
                       </div>
                     </div>
@@ -236,6 +266,14 @@ export default function Navbar() {
                       <Settings className="w-5 h-5 text-muted-foreground" />
                       <span>Cài đặt tài khoản</span>
                     </button>
+
+                    {/* Logout Button */}
+                    <LogoutButton
+                      variant="ghost"
+                      className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+                    >
+                      Đăng xuất
+                    </LogoutButton>
                   </div>
                 ) : (
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

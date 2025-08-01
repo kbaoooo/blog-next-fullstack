@@ -1,9 +1,11 @@
 "use client";
 
+import { Role } from "@/generated/prisma";
 import { cn } from "@/lib/utils";
 import {
   Bell,
   Camera,
+  LockIcon,
   Mail,
   Save,
   Settings,
@@ -21,7 +23,19 @@ interface UserSettingsModalProps {
     name: string;
     email: string;
     avatar?: string;
-    role: "ADMIN" | "GUEST" | "FOLLOWER";
+    role: Role;
+    settings: {
+      emailNewPosts: boolean; // Nhận email khi có bài viết mới
+      notiNewPosts: boolean; // Nhận thông báo khi có bài viết mới
+      notiCommentReplies: boolean; // Nhận thông báo khi có ai reply comment
+      notiLikeComment: boolean; // Nhận thông báo khi có ai thích comment của mình
+      notiComment: boolean; // Nhận thông báo bình luận mới (only for admin)
+      notiSharePost: boolean; // Nhận thông báo khi có ai chia sẻ bài viết của mình(only for admin)
+      notiLikePost: boolean; // Nhận thông báo khi có ai thích bài viết của mình(only for admin)
+      notiFollow: boolean; // Nhận thông báo khi có người theo dõi mình(only for admin)
+      browserNotifications: boolean; // Push notifications trên browser
+      twoFactorEnabled: boolean; // Xác thực 2 yếu tố
+    };
   };
 }
 
@@ -34,24 +48,21 @@ export default function UserSettingsModal({
 
   const [settings, setSettings] = useState({
     // Notification Preferences (cho visitors/followers/admin)
-    emailNewPosts: true, // Nhận email khi có bài viết mới
-    notiNewPosts: true, // Nhận thông báo khi có bài viết mới
-    notiCommentReplies: true, // Nhận thông báo khi có ai reply comment
-    notiLikeComment: true, // Nhận thông báo khi có ai thích comment của mình
-    notiSystem: true, // Nhận thông báo hệ thống
-    notiComment: false, // Nhận thông báo bình luận mới (only for admin)
-    notiSharePost: false, // Nhận thông báo khi có ai chia sẻ bài viết của mình(only for admin)
-    notiLikePost: false, // Nhận thông báo khi có ai thích bài viết của mình(only for admin)
-    notiFollow: true, // Nhận thông báo khi có người theo dõi mình(only for admin)
-    browserNotifications: false, // Push notifications trên browser
-
-    // Privacy Settings (chỉ cho blog cá nhân)
-    profilePublic: true, // Profile công khai - cho phép admin xem thông tin cơ bản
+    emailNewPosts: user?.settings?.emailNewPosts, // Nhận email khi có bài viết mới
+    notiNewPosts: user?.settings?.notiNewPosts, // Nhận thông báo khi có bài viết mới
+    notiCommentReplies: user?.settings?.notiCommentReplies, // Nhận thông báo khi có ai reply comment
+    notiLikeComment: user?.settings?.notiLikeComment, // Nhận thông báo khi có ai thích comment của mình
+    notiComment: user?.settings?.notiComment, // Nhận thông báo bình luận mới (only for admin)
+    notiSharePost: user?.settings?.notiSharePost, // Nhận thông báo khi có ai chia sẻ bài viết của mình(only for admin)
+    notiLikePost: user?.settings?.notiLikePost, // Nhận thông báo khi có ai thích bài viết của mình(only for admin)
+    notiFollow: user?.settings?.notiFollow, // Nhận thông báo khi có người theo dõi mình(only for admin)
+    browserNotifications: user?.settings?.browserNotifications, // Push notifications trên browser
+    twoFactorEnabled: user?.settings?.twoFactorEnabled, // Xác thực 2 yếu tố
 
     // Personal Info
-    name: user?.name || "",
-    email: user?.email || "",
-    avatarUrl: user?.avatar || undefined, // Avatar URL - use undefined instead of empty string
+    name: user?.name,
+    email: user?.email,
+    avatarUrl: user?.avatar, // Avatar URL - use undefined instead of empty string
   });
 
   const [isLoading, setIsLoading] = useState(false);
@@ -246,9 +257,9 @@ export default function UserSettingsModal({
                         : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400"
                     )}
                   >
-                    {user.role === "ADMIN"
+                    {user.role === Role.ADMIN
                       ? "Quản trị viên"
-                      : user.role === "FOLLOWER"
+                      : user.role === Role.FOLLOWER
                       ? "Người theo dõi"
                       : "Khách"}
                   </span>
@@ -300,7 +311,7 @@ export default function UserSettingsModal({
               <div className="flex items-center justify-between p-4 border border-border rounded-lg">
                 <div>
                   <div className="flex items-center space-x-2">
-                    <Mail className="w-4 h-4 text-muted-foreground" />
+                    <Bell className="w-4 h-4 text-muted-foreground" />
                     <span className="font-medium text-foreground">
                       Bài viết mới
                     </span>
@@ -390,37 +401,6 @@ export default function UserSettingsModal({
                       settings.notiLikeComment
                         ? "translate-x-6"
                         : "translate-x-0.5"
-                    )}
-                  />
-                </button>
-              </div>
-
-              {/* System Notifications */}
-              <div className="flex items-center justify-between p-4 border border-border rounded-lg">
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <Bell className="w-4 h-4 text-muted-foreground" />
-                    <span className="font-medium text-foreground">
-                      Thông báo hệ thống
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Nhận thông báo về các cập nhật hệ thống
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleToggle("notiSystem")}
-                  className={cn(
-                    "relative w-12 h-6 rounded-full transition-colors",
-                    settings.notiSystem
-                      ? "bg-primary"
-                      : "bg-gray-300 dark:bg-gray-600"
-                  )}
-                >
-                  <div
-                    className={cn(
-                      "absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform",
-                      settings.notiSystem ? "translate-x-6" : "translate-x-0.5"
                     )}
                   />
                 </button>
@@ -604,6 +584,40 @@ export default function UserSettingsModal({
                     className={cn(
                       "absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform",
                       settings.browserNotifications
+                        ? "translate-x-6"
+                        : "translate-x-0.5"
+                    )}
+                  />
+                </button>
+              </div>
+
+              {/* Two-Factor Authentication */}
+              <div className="flex items-center justify-between p-4 border border-border rounded-lg">
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <LockIcon className="w-4 h-4 text-muted-foreground" />
+                    <span className="font-medium text-foreground">
+                      Xác thực hai yếu tố
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Bảo vệ tài khoản của bạn bằng cách sử dụng xác thực hai yếu
+                    tố
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleToggle("twoFactorEnabled")}
+                  className={cn(
+                    "relative w-12 h-6 rounded-full transition-colors",
+                    settings.twoFactorEnabled
+                      ? "bg-primary"
+                      : "bg-gray-300 dark:bg-gray-600"
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform",
+                      settings.twoFactorEnabled
                         ? "translate-x-6"
                         : "translate-x-0.5"
                     )}

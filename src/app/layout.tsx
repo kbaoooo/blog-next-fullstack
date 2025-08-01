@@ -1,7 +1,9 @@
+import { ThemeProvider } from "@/components/custom/theme-provider";
+import { AuthProvider } from "@/lib/auth/auth-context";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import { ThemeProvider } from "@/components/custom/theme-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,7 +20,7 @@ export const metadata: Metadata = {
   title: {
     template: "KhanhBao Blog | %s",
     default: "Blog",
-  }
+  },
 };
 
 export default function RootLayout({
@@ -31,14 +33,17 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased custom-scrollbar`}
       >
-         <ThemeProvider
+        <AuthProvider>
+          <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >
             {children}
+            <Toaster />
           </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
